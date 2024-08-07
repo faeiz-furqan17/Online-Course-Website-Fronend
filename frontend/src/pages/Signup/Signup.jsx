@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Button, FormControlLabel } from "@mui/material";
 import { signUpSlicerFunc } from "../../redux/user/userSlice";
+import styles from "./Signup.module.scss";
+import Typewriter from "typewriter-effect";
+import Alert from "@mui/material/Alert";
 
 function Signup() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState(false);
 
   const [userData, setUserData] = useState({
     username: "",
@@ -16,6 +22,14 @@ function Signup() {
     password: "",
     is_instructor: false,
   });
+  useEffect(() => {
+    setError(user.error);
+  }, [user]);
+  useEffect(() => {
+    if (user.success) {
+      setSuccess(true);
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -24,64 +38,137 @@ function Signup() {
       [id]: type === "checkbox" ? checked : value,
     });
   };
+  const validateData = (userData) => {
+    if (
+      !userData.username ||
+      !userData.first_name ||
+      !userData.last_name ||
+      !userData.email ||
+      !userData.password
+    ) {
+      setError("All fields are required");
+      return false;
+    }
+    if (!userData.email.includes("@") || !userData.email.includes(".com")) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    if (userData.password.length < 8) {
+      setError("Password should be at least 8 characters long");
+      return false;
+    }
+    return true;
+  };
 
   return (
-    <div>
-      <PersonIcon />
+    <>
+      <div className={styles.mainContainer}>
+        <PersonIcon
+          sx={{
+            fontSize: 120,
+            color: "primary.main",
+          }}
+        />
 
-      <h2>Sign Up</h2>
-      <TextField
-        id="username"
-        label="username"
-        value={userData.username}
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="first_name"
-        label="First Name"
-        value={userData.first_name}
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="last_name"
-        label="Last Name"
-        value={userData.last_name}
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="email"
-        label="Email"
-        type="email"
-        value={userData.email}
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="password"
-        label="Password"
-        type="password"
-        value={userData.password}
-        onChange={handleInputChange}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            id="is_instructor"
-            checked={userData.is_instructor}
-            onChange={handleInputChange}
+        <h1>
+          <Typewriter
+            options={{
+              strings: ["Signup", "to", "learning"],
+              autoStart: true,
+              loop: true,
+            }}
           />
-        }
-        label="I am an instructor"
-      />
-      <Button
-        variant="outlined"
-        onClick={() => {
-          ;
-          dispatch(signUpSlicerFunc(userData));
-        }}
-      >
-        Sign Up
-      </Button>
-    </div>
+        </h1>
+        <TextField
+          required={true}
+          color="primary"
+          id="username"
+          label="User Name"
+          value={userData.username}
+          onChange={handleInputChange}
+        />
+        <TextField
+          required={true}
+          color="primary"
+          id="first_name"
+          label="First Name"
+          value={userData.first_name}
+          onChange={handleInputChange}
+        />
+        <TextField
+          required={true}
+          color="primary"
+          id="last_name"
+          label="Last Name"
+          value={userData.last_name}
+          onChange={handleInputChange}
+        />
+        <TextField
+          required={true}
+          color="primary"
+          id="email"
+          label="Email"
+          type="email"
+          value={userData.email}
+          onChange={handleInputChange}
+        />
+        <TextField
+          required={true}
+          color="primary"
+          id="password"
+          label="Password"
+          type="password"
+          value={userData.password}
+          onChange={handleInputChange}
+        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "500px",
+            justifyContent: "space-between",
+          }}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                id="is_instructor"
+                checked={userData.is_instructor}
+                onChange={handleInputChange}
+              />
+            }
+            label="I am an instructor"
+          />
+          <div>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                debugger;
+                if (validateData(userData)) {
+                  dispatch(signUpSlicerFunc(userData));
+                }
+              }}
+            >
+              Sign Up
+            </Button>
+          </div>
+        </div>
+        {error ? (
+          <Alert variant="outlined" severity="error">
+            {error == "Validation Error"
+              ? "The username has been taken"
+              : error}
+          </Alert>
+        ) : success == true ? (
+          <Alert variant="outlined" severity="success">
+            Account Created Successfully
+          </Alert>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 }
 

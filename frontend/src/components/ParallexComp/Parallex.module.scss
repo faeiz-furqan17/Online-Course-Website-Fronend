@@ -1,0 +1,14 @@
+.mainContainer {
+    background: #915757 center center/cover no-repeat fixed;
+
+    width: 100%;
+    height: 100vh;
+    display: flex;
+flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 5px 5px 10px #000000;
+    img{
+        filter: blur(50px);
+    }
+}

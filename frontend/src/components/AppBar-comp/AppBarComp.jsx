@@ -2,154 +2,141 @@ import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   IconButton,
-  Drawer,
   List,
   ListItem,
-  ListItemText,
-  MenuItem,
-  Button,
-  TextField,
   InputAdornment,
   OutlinedInput,
-  Input,
+  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Logo from "../../assets/logo/Logo";
 import ROUTES from "../../routes/routes";
-import { useSelector } from "react-redux";
+import { searchCourseSlicerFunc } from "../../redux/user/userSlice";
 
 function AppBarComp() {
-  // State to manage the visibility of the drawer
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const userProfile = useSelector((state) => state.user.userProfile);
-
-  // State to manage the text in the search input
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
 
-  // Handler for search input changes
   const handleSearch = (e) => {
     setSearchText(e.target.value);
+    dispatch(searchCourseSlicerFunc(e.target.value));
   };
 
+  const isUserProfileEmpty = Object.keys(userProfile).length === 0;
+
   return (
-    <>
-      <AppBar
-        color="primary"
-        position="relative"
-        sx={{ backgroundColor: "primary.main" }}
-      >
-        <Toolbar>
-          {/* Menu button to open the drawer */}
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setIsDrawerOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+    <AppBar
+      color="primary"
+      position="relative"
+      sx={{ backgroundColor: "rgba(255, 101, 47, 0.8)" }}
+    >
+      <Toolbar>
+        <IconButton>
+          <Logo />
+        </IconButton>
 
-          {/* Logo button */}
-          <IconButton>
-            <Logo />
-          </IconButton>
-
-          {/* Drawer component */}
-          <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-            <List
-              sx={{
-                width: 200,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-around",
-                padding: 0,
-                marginTop: 20,
-                gap: 3,
-                listStyle: "none",
-                "& > *": {
-                  width: "100%",
-                  padding: "10px 10",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  "&:hover": {
-                    cursor: "pointer",
-                    color: "secondary.main",
-                  },
-                },
-              }}
-            >
-              {/* List items for drawer */}
+        <List
+          sx={{
+            fontSize: "medium",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            padding: 0,
+            marginLeft: 10,
+            gap: 1,
+            listStyle: "none",
+            "& > *": {
+              width: "100%",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              whiteSpace: "nowrap",
+              "&:hover": {
+                cursor: "pointer",
+                color: "secondary.main",
+              },
+            },
+          }}
+        >
+          <ListItem>
+            <Link to={ROUTES.HOMEPAGE}>Home</Link>
+          </ListItem>
+          <ListItem>
+            <Link to={ROUTES.USER_PROFILE}>Profile</Link>
+          </ListItem>
+          {userProfile.is_instructor && (
+            <>
               <ListItem>
-                <Link to={ROUTES.HOMEPAGE}>Home</Link>
+                <Link to={ROUTES.COURSE_ADD}>Manage Courses</Link>
               </ListItem>
               <ListItem>
-                <Link to={ROUTES.USER_PROFILE}>Profile</Link>
+                <Link to={ROUTES.PREFERENCE_ADD}>Your Preference</Link>
               </ListItem>
-              {userProfile.is_instructor ? (
-                <ListItem>
-                  <Link to={ROUTES.COURSE_ADD}>Manage Courses</Link>
-                </ListItem>
-              ) : null}
-            </List>
-          </Drawer>
+            </>
+          )}
+        </List>
 
-          {/* Search input field */}
-          <Input
-            sx={{ marginLeft: 5 }}
+        <div
+          style={{
+            marginLeft: "auto",
+            display: "flex",
+            justifyContent: "space-around",
+            gap: 10,
+          }}
+        >
+          <OutlinedInput
+            sx={{
+              marginLeft: 5,
+            }}
             autoComplete="on"
             inputProps={{ "aria-label": "search" }}
             size="small"
             color="secondary"
             id="search"
-            label="search"
             value={searchText}
             onChange={handleSearch}
             placeholder="Search..."
-            variant="filled"
             type="search"
             endAdornment={
               <InputAdornment position="end">
-                <IconButton>
-                  <SearchIcon color={searchText ? "secondary" : ""} />
+                <IconButton onClick={() => navigate(ROUTES.SEARCH)}>
+                  <SearchIcon color={searchText ? "secondary" : "inherit"} />
                 </IconButton>
               </InputAdornment>
             }
           />
 
-          {/* Buttons for sign in and registration */}
-          <div
-            style={{
-              marginLeft: "auto",
-              display: "flex",
-              justifyContent: "space-around",
-              gap: 10,
-            }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              size="md"
-              sx={{ borderRadius: "20px" }}
-            >
-              Sign In
-            </Button>
-            <Button
-              variant="contained"
-              color="warning"
-              size="md"
-              sx={{ borderRadius: "20px" }}
-            >
-              Register for free
-            </Button>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </>
+          {isUserProfileEmpty && (
+            <>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="md"
+                sx={{ borderRadius: "20px" }}
+                onClick={() => navigate(ROUTES.LOGIN)}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="contained"
+                color="warning"
+                size="md"
+                sx={{ borderRadius: "20px" }}
+                onClick={() => navigate(ROUTES.REGISTER)}
+              >
+                Register for free
+              </Button>
+            </>
+          )}
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 }
 

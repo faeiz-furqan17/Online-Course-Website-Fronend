@@ -1,0 +1,55 @@
+.mainContainer {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    img {
+      margin-top: 20px;
+      clip-path: circle(50% at 50% 50%);
+      width: 200px;
+      height: 200px; 
+      object-fit: cover; 
+      
+      
+    };
+
+  }
+  
+.Box1{
+  margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    height: 400px;
+width: 100%;
+background: rgba(255, 101, 47, 0.31);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(255, 101, 47, 0.3);
+
+}
+.Box2{
+    @extend .Box1;
+    /* From https://css.glass */
+background: rgba(255, 228, 0, 0.31);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(255, 228, 0, 0.3);
+}
+.Box3{
+    @extend .Box1;
+    /* From https://css.glass */
+background: rgba(20, 167, 108, 0.31);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(20, 167, 108, 0.3);
+margin-bottom: 50px;
+}

@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSlicerFunc } from "../../redux/user/userSlice";
+import styles from "./Login.module.scss";
+import PersonIcon from "@mui/icons-material/Person";
+import Typewriter from "typewriter-effect";
+import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
@@ -26,7 +30,6 @@ function Login() {
   // Implement server-side login logic here
 
   const handleSubmit = (e) => {
-    debugger;
     dispatch(loginSlicerFunc(userData));
   };
   useEffect(() => {
@@ -41,33 +44,58 @@ function Login() {
   }, [user.data, user.error]);
 
   return (
-    <div>
-      <TextField
-        id="username"
-        label="username"
-        value={userData.username}
-        onChange={handleInputChange}
-      />
-      <TextField
-        id="password"
-        label="password"
-        type="password"
-        value={userData.password}
-        onChange={handleInputChange}
-      />
-      <Button variant="text" color="secondary" onClick={() => handleSubmit()}>
-        login
-      </Button>
-      <Button
-        variant="text"
-        color="primary"
-        onClick={() => {
-          console.log(user.data.token);
-        }}
-      >
-        see details now
-      </Button>
-    </div>
+    <>
+      <div className={styles.mainContainer}>
+        <PersonIcon
+          sx={{
+            fontSize: 120,
+            color: "primary.main",
+          }}
+        />
+
+        <h1>
+          <Typewriter
+            options={{
+              strings: ["Login"],
+              autoStart: true,
+              loop: true,
+            }}
+          />
+        </h1>
+
+        <TextField
+          id="username"
+          label="Username"
+          value={userData.username}
+          onChange={handleInputChange}
+        />
+        <TextField
+          id="password"
+          label="Password"
+          type="password"
+          value={userData.password}
+          onChange={handleInputChange}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleSubmit()}
+        >
+          login
+        </Button>
+        <p>
+          Dont have an account yet ?{" "}
+          <Link
+            to={"/signup"}
+            style={{
+              color: "#ff652f",
+            }}
+          >
+            Signup
+          </Link>
+        </p>
+      </div>
+    </>
   );
 }
 

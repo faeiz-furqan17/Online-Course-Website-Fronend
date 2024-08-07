@@ -3,3 +3,27 @@ a{
     text-decoration: none !important;
     color: inherit !important;
 }
+.css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 100px hsl(17, 27%, 18%) inset !important;
+}
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.5;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#root {
+    height: 100%;
+}
+.rfm-marquee{
+
+}
+.css-w6vty1-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0 100px hsl(17, 27%, 18%) inset !important;
+}

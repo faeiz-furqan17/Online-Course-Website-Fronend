@@ -4,6 +4,9 @@ import {
   loginServiceFunc,
   userProfileServiceFunc,
   courseAddServiceFunc,
+  categoryListServiceFunc,
+  searchCourseServiceFunc,
+  addPreferenceServiceFunc,
 } from "../../services/user/userService";
 
 const initialState = {
@@ -11,8 +14,17 @@ const initialState = {
   userProfile: [],
   data: [],
   courseData: [],
+  categoryList: [],
+  searchResult: [],
+  preference: [],
+  success: false,
   error: null,
 };
+
+export const searchCourseSlicerFunc = createAsyncThunk(
+  "searchCourse",
+  searchCourseServiceFunc
+);
 
 export const fetchUserProfile = createAsyncThunk(
   "fetchUserProfile",
@@ -23,7 +35,22 @@ export const loginSlicerFunc = createAsyncThunk("login", loginServiceFunc);
 
 export const addCourseSlicerFunc = createAsyncThunk(
   "addCourse",
-  courseAddServiceFunc
+  async ({ token, courseData }) => {
+    return courseAddServiceFunc(token, courseData);
+  }
+);
+
+export const fetchCategoryList = createAsyncThunk(
+  "fetchCategoryList",
+  categoryListServiceFunc
+);
+
+export const addPreferenceSlicerFunc = createAsyncThunk(
+  "addPreference",
+  async ({ token, category }) => {
+    debugger;
+    return addPreferenceServiceFunc(token, category);
+  }
 );
 
 const userSlice = createSlice({
@@ -31,31 +58,32 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
+    debugger;
     builder.addCase(signUpSlicerFunc.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
     builder.addCase(signUpSlicerFunc.fulfilled, (state, action) => {
+      debugger;
       state.loading = false;
       state.data = action.payload;
+      state.success = true;
     });
     builder.addCase(signUpSlicerFunc.rejected, (state, action) => {
+      debugger;
       state.loading = false;
       state.error = action.error.message;
     });
     builder.addCase(loginSlicerFunc.pending, (state) => {
-      debugger;
       state.loading = true;
       state.error = null;
     });
     builder.addCase(loginSlicerFunc.fulfilled, (state, action) => {
-      debugger;
       state.loading = false;
       state.error = null;
       state.data = action.payload;
     }),
       builder.addCase(loginSlicerFunc.rejected, (state, action) => {
-        debugger;
         state.loading = false;
         state.error = action.error.message;
       });
@@ -81,6 +109,46 @@ const userSlice = createSlice({
     });
     builder.addCase(addCourseSlicerFunc.rejected, (state, action) => {
       state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchCategoryList.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchCategoryList.fulfilled, (state, action) => {
+      state.loading = false;
+      state.categoryList = action.payload;
+    });
+    builder.addCase(fetchCategoryList.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(searchCourseSlicerFunc.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(searchCourseSlicerFunc.fulfilled, (state, action) => {
+      state.loading = false;
+      state.searchResult = action.payload;
+    });
+    builder.addCase(searchCourseSlicerFunc.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(addPreferenceSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addPreferenceSlicerFunc.fulfilled, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.preference = action.payload;
+    });
+    builder.addCase(addPreferenceSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
+
       state.error = action.error.message;
     });
   },
