@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { enrollmentAddSlicerFunc } from "../../redux/user/userSlice";
 import {
   Card,
   List,
@@ -11,8 +13,10 @@ import styles from "./CourseCard.module.scss";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 import SchoolIcon from "@mui/icons-material/School";
+import { orange } from "@mui/material/colors";
 
 function CourseCard({
+  courseId,
   name,
   description,
   price,
@@ -20,6 +24,26 @@ function CourseCard({
   categories = [],
   duration,
 }) {
+  debugger;
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const handleEnrollment = (courseId) => {
+    if (!user.data.token) {
+      return alert(
+        "You must be logged in to enroll in courses or view search results."
+      );
+    } else {
+      debugger;
+      dispatch(
+        enrollmentAddSlicerFunc({
+          token: user.data.token.access,
+          courseId: courseId,
+        })
+      );
+      alert("Course Enrolled Successfully");
+    }
+  };
+
   useEffect(() => {
     console.log(
       "CourseCard",
@@ -35,7 +59,8 @@ function CourseCard({
   return (
     <>
       <div className={styles.mainContainer}>
-        <Card sx={{ width: 320, padding: 2 }} variant="outlined">
+
+        <Card sx={{ width: 420, padding: 2 }} variant="outlined">
           <Typography variant="h5">{name}</Typography>
           <Typography variant="body2" align="left" color="textSecondary">
             {description}
@@ -95,6 +120,9 @@ function CourseCard({
               color="primary"
               size="small"
               style={{ width: "100%" }}
+              onClick={() => {
+                handleEnrollment(courseId);
+              }}
             >
               Enroll Now
             </Button>

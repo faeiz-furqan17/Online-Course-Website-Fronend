@@ -1,9 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { enrollmentAddSlicerFunc } from "../../redux/user/userSlice";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import { Skeleton, Typography, Divider } from "@mui/material";
 
 function Search() {
+  debugger;
   const courses = useSelector((state) => state.user.searchResult);
 
   const isLoading = !courses || courses.length === 0;
@@ -47,6 +49,7 @@ function Search() {
         ) : (
           courses.Courses.map((course) => (
             <CourseCard
+              courseId={course.id}
               key={course.id}
               name={course.name}
               description={course.description}

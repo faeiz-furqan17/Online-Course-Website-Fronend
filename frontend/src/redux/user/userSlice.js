@@ -7,6 +7,9 @@ import {
   categoryListServiceFunc,
   searchCourseServiceFunc,
   addPreferenceServiceFunc,
+  enrollmentAddServiceFunc,
+  courseListServiceFunc,
+  userLogoutServiceFunc,
 } from "../../services/user/userService";
 
 const initialState = {
@@ -19,6 +22,7 @@ const initialState = {
   preference: [],
   success: false,
   error: null,
+  courseList: [],
 };
 
 export const searchCourseSlicerFunc = createAsyncThunk(
@@ -53,6 +57,23 @@ export const addPreferenceSlicerFunc = createAsyncThunk(
   }
 );
 
+export const enrollmentAddSlicerFunc = createAsyncThunk(
+  "enrollmentAdd",
+  async ({ token, courseId }) => {
+    debugger;
+    return enrollmentAddServiceFunc(token, courseId);
+  }
+);
+
+export const fetchCourseList = createAsyncThunk(
+  "fetchCourseList",
+  courseListServiceFunc
+);
+
+export const userLogoutSlicerFunc = createAsyncThunk(
+  "userLogout",
+  userLogoutServiceFunc
+);
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -149,6 +170,51 @@ const userSlice = createSlice({
       debugger;
       state.loading = false;
 
+      state.error = action.error.message;
+    });
+    builder.addCase(enrollmentAddSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(enrollmentAddSlicerFunc.fulfilled, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.success = true;
+    });
+    builder.addCase(enrollmentAddSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(fetchCourseList.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchCourseList.fulfilled, (state, action) => {
+      state.loading = false;
+      state.courseList = action.payload;
+    });
+    builder.addCase(fetchCourseList.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(userLogoutSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(userLogoutSlicerFunc.fulfilled, (state) => {
+      debugger;
+      state.loading = false;
+      state.data = [];
+      state.userProfile = [];
+      state.error = null;
+    });
+    builder.addCase(userLogoutSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
       state.error = action.error.message;
     });
   },

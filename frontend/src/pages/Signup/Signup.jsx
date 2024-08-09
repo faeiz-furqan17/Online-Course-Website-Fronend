@@ -7,8 +7,11 @@ import { signUpSlicerFunc } from "../../redux/user/userSlice";
 import styles from "./Signup.module.scss";
 import Typewriter from "typewriter-effect";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../../routes/routes";
 
 function Signup() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [error, setError] = useState();
@@ -141,12 +144,14 @@ function Signup() {
           />
           <div>
             <Button
+              disabled={user.loading}
               color="primary"
               variant="contained"
               onClick={() => {
                 debugger;
                 if (validateData(userData)) {
                   dispatch(signUpSlicerFunc(userData));
+                  success ? setTimeout(navigate(ROUTES.HOMEPAGE), 100) : none;
                 }
               }}
             >

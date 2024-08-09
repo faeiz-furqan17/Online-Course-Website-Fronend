@@ -107,3 +107,47 @@ export const addPreferenceServiceFunc = async (token, categoryId) => {
     throw error;
   }
 };
+export const enrollmentAddServiceFunc = async (token, course) => {
+  try {
+    debugger;
+    const response = await axios.post(
+      `${BASE_URL}enrollment/add`,
+      { course },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in adding enrollment:", error);
+    throw error;
+  }
+};
+export const courseListServiceFunc = async (offset) => {
+  try {
+    debugger;
+    const response = await axios.get(`${BASE_URL}courses/?limit=10`, {
+      params: { offset },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in course list:", error);
+    throw error;
+  }
+};
+export const userLogoutServiceFunc = async (token) => {
+  try {
+    debugger;
+    const response = await axios.post(
+      `${BASE_URL}logout/`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in user logout:", error);
+    throw error;
+  }
+};

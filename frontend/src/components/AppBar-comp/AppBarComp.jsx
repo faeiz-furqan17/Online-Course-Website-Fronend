@@ -15,10 +15,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Logo from "../../assets/logo/Logo";
 import ROUTES from "../../routes/routes";
-import { searchCourseSlicerFunc } from "../../redux/user/userSlice";
+import {
+  searchCourseSlicerFunc,
+  userLogoutSlicerFunc,
+} from "../../redux/user/userSlice";
 
 function AppBarComp() {
   const userProfile = useSelector((state) => state.user.userProfile);
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
@@ -29,6 +33,11 @@ function AppBarComp() {
   };
 
   const isUserProfileEmpty = Object.keys(userProfile).length === 0;
+  const handleLogout = () => {
+    debugger;
+    dispatch(userLogoutSlicerFunc(user.data.token.access));
+    navigate(ROUTES.HOMEPAGE);
+  };
 
   return (
     <AppBar
@@ -43,13 +52,13 @@ function AppBarComp() {
 
         <List
           sx={{
-            fontSize: "medium",
+            fontSize: "small",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-around",
             padding: 0,
-            marginLeft: 10,
+            marginLeft: 1,
             gap: 1,
             listStyle: "none",
             "& > *": {
@@ -69,6 +78,9 @@ function AppBarComp() {
           </ListItem>
           <ListItem>
             <Link to={ROUTES.USER_PROFILE}>Profile</Link>
+          </ListItem>
+          <ListItem>
+            <Link to={ROUTES.COURSES}>Courses</Link>
           </ListItem>
           {userProfile.is_instructor && (
             <>
@@ -92,7 +104,7 @@ function AppBarComp() {
         >
           <OutlinedInput
             sx={{
-              marginLeft: 5,
+              marginLeft: 1,
             }}
             autoComplete="on"
             inputProps={{ "aria-label": "search" }}
@@ -117,8 +129,9 @@ function AppBarComp() {
               <Button
                 variant="contained"
                 color="secondary"
-                size="md"
-                sx={{ borderRadius: "20px" }}
+                sx={{
+                  borderRadius: "20px",
+                }}
                 onClick={() => navigate(ROUTES.LOGIN)}
               >
                 Sign In
@@ -133,6 +146,19 @@ function AppBarComp() {
                 Register for free
               </Button>
             </>
+          )}
+          {!isUserProfileEmpty ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
+              logout
+            </Button>
+          ) : (
+            <></>
           )}
         </div>
       </Toolbar>
