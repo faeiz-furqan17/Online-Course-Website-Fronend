@@ -6,8 +6,6 @@ function Profile() {
   const userProfile = useSelector((state) => state.user.userProfile);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(userProfile);
-    debugger;
     dispatch(fetchUserProfile(user.data.token.access));
   }, [user.data.token]);
 

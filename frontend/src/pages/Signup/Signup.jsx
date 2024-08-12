@@ -148,7 +148,6 @@ function Signup() {
               color="primary"
               variant="contained"
               onClick={() => {
-                debugger;
                 if (validateData(userData)) {
                   dispatch(signUpSlicerFunc(userData));
                   success ? setTimeout(navigate(ROUTES.HOMEPAGE), 100) : none;

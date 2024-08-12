@@ -52,7 +52,6 @@ export const fetchCategoryList = createAsyncThunk(
 export const addPreferenceSlicerFunc = createAsyncThunk(
   "addPreference",
   async ({ token, category }) => {
-    debugger;
     return addPreferenceServiceFunc(token, category);
   }
 );
@@ -60,7 +59,6 @@ export const addPreferenceSlicerFunc = createAsyncThunk(
 export const enrollmentAddSlicerFunc = createAsyncThunk(
   "enrollmentAdd",
   async ({ token, courseId }) => {
-    debugger;
     return enrollmentAddServiceFunc(token, courseId);
   }
 );
@@ -79,19 +77,16 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
-    debugger;
     builder.addCase(signUpSlicerFunc.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
     builder.addCase(signUpSlicerFunc.fulfilled, (state, action) => {
-      debugger;
       state.loading = false;
       state.data = action.payload;
       state.success = true;
     });
     builder.addCase(signUpSlicerFunc.rejected, (state, action) => {
-      debugger;
       state.loading = false;
       state.error = action.error.message;
     });
@@ -157,33 +152,28 @@ const userSlice = createSlice({
       state.error = action.error.message;
     });
     builder.addCase(addPreferenceSlicerFunc.pending, (state) => {
-      debugger;
       state.loading = true;
       state.error = null;
     });
     builder.addCase(addPreferenceSlicerFunc.fulfilled, (state, action) => {
-      debugger;
       state.loading = false;
       state.preference = action.payload;
     });
     builder.addCase(addPreferenceSlicerFunc.rejected, (state, action) => {
-      debugger;
       state.loading = false;
 
       state.error = action.error.message;
     });
     builder.addCase(enrollmentAddSlicerFunc.pending, (state) => {
-      debugger;
       state.loading = true;
       state.error = null;
     });
     builder.addCase(enrollmentAddSlicerFunc.fulfilled, (state, action) => {
-      debugger;
       state.loading = false;
       state.success = true;
     });
     builder.addCase(enrollmentAddSlicerFunc.rejected, (state, action) => {
-      debugger;
+      state.success = false;
       state.loading = false;
       state.error = action.error.message;
     });
@@ -201,19 +191,16 @@ const userSlice = createSlice({
       state.error = action.error.message;
     });
     builder.addCase(userLogoutSlicerFunc.pending, (state) => {
-      debugger;
       state.loading = true;
       state.error = null;
     });
     builder.addCase(userLogoutSlicerFunc.fulfilled, (state) => {
-      debugger;
       state.loading = false;
       state.data = [];
       state.userProfile = [];
       state.error = null;
     });
     builder.addCase(userLogoutSlicerFunc.rejected, (state, action) => {
-      debugger;
       state.loading = false;
       state.error = action.error.message;
     });

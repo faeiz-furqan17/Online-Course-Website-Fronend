@@ -5,7 +5,6 @@ import CourseCard from "../../components/CourseCard/CourseCard";
 import { Skeleton, Typography, Divider } from "@mui/material";
 
 function Search() {
-  debugger;
   const courses = useSelector((state) => state.user.searchResult);
 
   const isLoading = !courses || courses.length === 0;

@@ -1,0 +1,35 @@
+@import './../../color/color.scss';
+.list {
+    font-size: small;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0;
+    margin-left: 1;
+
+    gap: 1;
+    list-style: none;
+  
+    & > * {
+      width: 100%;
+      text-transform: uppercase;
+      font-weight: 500;
+      white-space: nowrap;
+  
+      &:hover {
+        cursor: pointer;
+        color: $secondary-main;
+      }
+    }
+  }
+  .searchSignInRegisterbtn {
+    margin-left: auto;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+  }
+  
+
+  
+  

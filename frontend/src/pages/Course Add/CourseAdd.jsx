@@ -7,9 +7,11 @@ import {
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import FormHelperText from "@mui/material/FormHelperText";
-import { Input } from "@mui/material";
+import { Input, Select, MenuItem } from "@mui/material";
 
 function CourseAdd() {
+  const dispatch = useDispatch();
+  const category = useSelector((state) => state.user.categoryList);
   const user = useSelector((state) => state.user);
   const [course, setCourse] = React.useState({
     name: "",
@@ -20,7 +22,6 @@ function CourseAdd() {
   });
   const handleChange = (e) => {
     const { name, value, type, selectedOptions } = e.target;
-    console.log(typeof e.target.value);
     if (name === "category") {
       const selectedValues = Array.from(selectedOptions, (option) =>
         Number(option.value)
@@ -42,8 +43,6 @@ function CourseAdd() {
     handleAddCourse(course);
   };
 
-  const dispatch = useDispatch();
-  const category = useSelector((state) => state.user.categoryList);
   const handleAddCourse = (course) => {
     course.price = Number(course.price);
 
@@ -101,19 +100,28 @@ function CourseAdd() {
       </FormControl>
       <FormControl>
         <FormLabel>Course Category</FormLabel>
-        <select
+        <Select
+          labelId="category-label"
+          id="category-select"
           multiple
-          type="list"
-          name="category"
           value={course.category}
           onChange={handleChange}
+          name="category"
+          renderValue={(selected) =>
+            selected
+              .map((id) => {
+                const cat = category.find((c) => c.id === id);
+                return cat ? cat.name : "";
+              })
+              .join(", ")
+          }
         >
           {category.map((cat) => (
-            <option key={cat.id} value={cat.id}>
+            <MenuItem key={cat.id} value={cat.id}>
               {cat.name}
-            </option>
+            </MenuItem>
           ))}
-        </select>
+        </Select>
         <FormHelperText>select the course category*</FormHelperText>
       </FormControl>
       <button type="submit" onClick={handleSubmit}>

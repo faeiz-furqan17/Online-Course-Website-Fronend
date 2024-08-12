@@ -23,13 +23,13 @@ function PreferenceAdd() {
   };
 
   const handleToggleCategory = (categoryId) => {
-    if (selectedCategories.includes(categoryId)) {
-      setSelectedCategories(
-        selectedCategories.filter((id) => id !== categoryId)
-      );
-    } else {
-      setSelectedCategories([...selectedCategories, categoryId]);
-    }
+    setSelectedCategories((prevSelectedCategories) => {
+      if (prevSelectedCategories.includes(categoryId)) {
+        return prevSelectedCategories.filter((id) => id !== categoryId);
+      } else {
+        return [...prevSelectedCategories, categoryId];
+      }
+    });
   };
 
   useEffect(() => {
@@ -59,7 +59,6 @@ function PreferenceAdd() {
         variant="contained"
         color="primary"
         onClick={() => {
-          console.log(selectedCategories);
           handleAddPreference(selectedCategories);
           setSelectedCategories([]);
         }}

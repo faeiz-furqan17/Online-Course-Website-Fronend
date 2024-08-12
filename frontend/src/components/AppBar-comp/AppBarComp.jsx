@@ -19,6 +19,7 @@ import {
   searchCourseSlicerFunc,
   userLogoutSlicerFunc,
 } from "../../redux/user/userSlice";
+import styles from "./AppBarComp.module.scss";
 
 function AppBarComp() {
   const userProfile = useSelector((state) => state.user.userProfile);
@@ -32,9 +33,8 @@ function AppBarComp() {
     dispatch(searchCourseSlicerFunc(e.target.value));
   };
 
-  const isUserProfileEmpty = Object.keys(userProfile).length === 0;
+  const isUserLoggedOff = user.data.id;
   const handleLogout = () => {
-    debugger;
     dispatch(userLogoutSlicerFunc(user.data.token.access));
     navigate(ROUTES.HOMEPAGE);
   };
@@ -50,29 +50,7 @@ function AppBarComp() {
           <Logo />
         </IconButton>
 
-        <List
-          sx={{
-            fontSize: "small",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-around",
-            padding: 0,
-            marginLeft: 1,
-            gap: 1,
-            listStyle: "none",
-            "& > *": {
-              width: "100%",
-              textTransform: "uppercase",
-              fontWeight: 500,
-              whiteSpace: "nowrap",
-              "&:hover": {
-                cursor: "pointer",
-                color: "secondary.main",
-              },
-            },
-          }}
-        >
+        <List className={styles.list}>
           <ListItem>
             <Link to={ROUTES.HOMEPAGE}>Home</Link>
           </ListItem>
@@ -94,14 +72,7 @@ function AppBarComp() {
           )}
         </List>
 
-        <div
-          style={{
-            marginLeft: "auto",
-            display: "flex",
-            justifyContent: "space-around",
-            gap: 10,
-          }}
-        >
+        <div className={styles.searchSignInRegisterbtn}>
           <OutlinedInput
             sx={{
               marginLeft: 1,
@@ -124,7 +95,7 @@ function AppBarComp() {
             }
           />
 
-          {isUserProfileEmpty && (
+          {!isUserLoggedOff ? (
             <>
               <Button
                 variant="contained"
@@ -146,8 +117,10 @@ function AppBarComp() {
                 Register for free
               </Button>
             </>
+          ) : (
+            <></>
           )}
-          {!isUserProfileEmpty ? (
+          {isUserLoggedOff ? (
             <Button
               variant="contained"
               color="error"

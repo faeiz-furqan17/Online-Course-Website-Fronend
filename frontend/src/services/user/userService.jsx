@@ -4,7 +4,6 @@ const BASE_URL = "http://127.0.0.1:8000/";
 
 export const signUpServiceFunc = async (userData) => {
   try {
-    debugger;
     const response = await axios.post(`${BASE_URL}signup/`, userData);
     return response.data;
   } catch (error) {
@@ -93,7 +92,6 @@ export const searchCourseServiceFunc = async (search) => {
 };
 export const addPreferenceServiceFunc = async (token, categoryId) => {
   try {
-    debugger;
     const response = await axios.post(
       `${BASE_URL}preferences/add`,
       categoryId,
@@ -109,7 +107,6 @@ export const addPreferenceServiceFunc = async (token, categoryId) => {
 };
 export const enrollmentAddServiceFunc = async (token, course) => {
   try {
-    debugger;
     const response = await axios.post(
       `${BASE_URL}enrollment/add`,
       { course },
@@ -125,7 +122,6 @@ export const enrollmentAddServiceFunc = async (token, course) => {
 };
 export const courseListServiceFunc = async (offset) => {
   try {
-    debugger;
     const response = await axios.get(`${BASE_URL}courses/?limit=10`, {
       params: { offset },
     });
@@ -137,7 +133,6 @@ export const courseListServiceFunc = async (offset) => {
 };
 export const userLogoutServiceFunc = async (token) => {
   try {
-    debugger;
     const response = await axios.post(
       `${BASE_URL}logout/`,
       {},

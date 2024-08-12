@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,41 +7,53 @@ import styles from "./Login.module.scss";
 import PersonIcon from "@mui/icons-material/Person";
 import Typewriter from "typewriter-effect";
 import { Link } from "react-router-dom";
-
 import Button from "@mui/material/Button";
-import { useEffect } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
-  const handleLogin = () => {
-    navigate("/profile");
-  };
-  // Add form validation and server-side validation here
   const [userData, setUserData] = useState({
     username: "",
     password: "",
   });
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const redirectLogin = () => {
+    navigate("/profile");
+  };
+
   const handleInputChange = (e) => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
   };
-  // Implement server-side login logic here
 
   const handleSubmit = (e) => {
     dispatch(loginSlicerFunc(userData));
   };
+
   useEffect(() => {
     if (user.data.token != undefined) {
-      handleLogin();
+      setSnackbarMessage("Login successful!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      redirectLogin();
     } else if (user.error) {
-      console.error("Error in login:", user.error);
-      alert(user.error);
+      setSnackbarMessage(`Error: ${user.error}`);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       setUserData({ ...userData, password: "" });
-      return;
     }
   }, [user.data, user.error]);
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <>
@@ -68,6 +80,7 @@ function Login() {
           label="Username"
           value={userData.username}
           onChange={handleInputChange}
+          disabled={user.loading || user.success}
         />
         <TextField
           id="password"
@@ -75,18 +88,20 @@ function Login() {
           type="password"
           value={userData.password}
           onChange={handleInputChange}
+          disabled={user.loading || user.success}
         />
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleSubmit()}
+          onClick={handleSubmit}
+          disabled={user.loading || user.success}
         >
-          login
+          Login
         </Button>
         <p>
-          Dont have an account yet ?{" "}
+          Don't have an account yet?{" "}
           <Link
-            to={"/signup"}
+            to="/signup"
             style={{
               color: "#ff652f",
             }}
@@ -95,6 +110,20 @@ function Login() {
           </Link>
         </p>
       </div>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { Skeleton, Typography, Divider, Button } from "@mui/material";
 import { useEffect } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import styles from "./Courses.modules.scss";
 
 import CourseCard from "../../components/CourseCard/CourseCard";
 function Courses() {
@@ -42,19 +43,7 @@ function Courses() {
         </Typography>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          margin: "auto",
-          flexDirection: "row",
-          flexWrap: "wrap",
-
-          gap: 20,
-          padding: 20,
-          width: "100%",
-          marginTop: 20,
-        }}
-      >
+      <div className={styles.container}>
         {isLoading ? (
           <>
             <Skeleton variant="rectangular" width={210} height={118} />
