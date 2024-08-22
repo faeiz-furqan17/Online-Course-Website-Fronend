@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
 import {
   signUpServiceFunc,
   loginServiceFunc,
@@ -10,12 +11,20 @@ import {
   enrollmentAddServiceFunc,
   courseListServiceFunc,
   userLogoutServiceFunc,
+  checkoutServiceFunc,
+  uploadUserImage,
+  getUserProfileImage,
+  updateUserProfileImage,
 } from "../../services/user/userService";
 
 const initialState = {
   loading: false,
-  userProfile: [],
-  data: [],
+  userProfile: JSON.parse(localStorage.getItem("userProfile"))
+    ? JSON.parse(localStorage.getItem("userProfile"))
+    : [],
+  data: JSON.parse(localStorage.getItem("user"))
+    ? JSON.parse(localStorage.getItem("user"))
+    : [],
   courseData: [],
   categoryList: [],
   searchResult: [],
@@ -23,6 +32,8 @@ const initialState = {
   success: false,
   error: null,
   courseList: [],
+  checkout: false,
+  image: null,
 };
 
 export const searchCourseSlicerFunc = createAsyncThunk(
@@ -72,6 +83,35 @@ export const userLogoutSlicerFunc = createAsyncThunk(
   "userLogout",
   userLogoutServiceFunc
 );
+
+export const checkoutSlicerFunc = createAsyncThunk(
+  "checkout",
+  async ({ token, courseID }) => {
+    return checkoutServiceFunc(token, courseID);
+  }
+);
+
+export const uploadImageSlicerFunc = createAsyncThunk(
+  "uploadImage",
+  async ({ token, image }) => {
+    debugger;
+    return uploadUserImage(token, image);
+  }
+);
+
+export const getUserProfileImageSlicerFunc = createAsyncThunk(
+  "getUserProfileImage",
+  async ({ token }) => {
+    return getUserProfileImage(token);
+  }
+);
+
+export const updateUserProfileImageSlicerFunc = createAsyncThunk(
+  "updateUserProfileImage",
+  async ({ token, image }) => {
+    return updateUserProfileImage(token, image);
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -98,6 +138,9 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.data = action.payload;
+      let userData = JSON.stringify(action.payload);
+      localStorage.setItem("user", userData);
+      state.success = true;
     }),
       builder.addCase(loginSlicerFunc.rejected, (state, action) => {
         state.loading = false;
@@ -110,6 +153,9 @@ const userSlice = createSlice({
     builder.addCase(fetchUserProfile.fulfilled, (state, action) => {
       state.loading = false;
       state.userProfile = action.payload;
+      state.success = true;
+      let userProfile = JSON.stringify(action.payload);
+      localStorage.setItem("userProfile", userProfile);
     });
     builder.addCase(fetchUserProfile.rejected, (state, action) => {
       state.loading = false;
@@ -195,15 +241,93 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(userLogoutSlicerFunc.fulfilled, (state) => {
+      state.success = false;
+
       state.loading = false;
       state.data = [];
       state.userProfile = [];
       state.error = null;
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("userProfile");
     });
     builder.addCase(userLogoutSlicerFunc.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
+    builder.addCase(checkoutSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(checkoutSlicerFunc.fulfilled, (state, action) => {
+      debugger;
+      debugger;
+      state.loading = false;
+      state.success = true;
+      state.checkout = action.payload;
+    });
+    builder.addCase(checkoutSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(uploadImageSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(uploadImageSlicerFunc.fulfilled, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.success = true;
+      state.image = action.payload;
+    });
+    builder.addCase(uploadImageSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(getUserProfileImageSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(
+      getUserProfileImageSlicerFunc.fulfilled,
+      (state, action) => {
+        debugger;
+        state.loading = false;
+        state.image = action.payload.image;
+      }
+    );
+    builder.addCase(getUserProfileImageSlicerFunc.rejected, (state, action) => {
+      debugger;
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(updateUserProfileImageSlicerFunc.pending, (state) => {
+      debugger;
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(
+      updateUserProfileImageSlicerFunc.fulfilled,
+      (state, action) => {
+        debugger;
+        state.loading = false;
+        state.success = true;
+        state.image = action.payload.image;
+      }
+    );
+    builder.addCase(
+      updateUserProfileImageSlicerFunc.rejected,
+      (state, action) => {
+        debugger;
+        state.loading = false;
+        state.error = action.error.message;
+      }
+    );
   },
 });
 

@@ -5,7 +5,7 @@ import { Skeleton, Typography, Divider, Button } from "@mui/material";
 import { useEffect } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import styles from "./Courses.modules.scss";
+import styles from "./Courses.module.scss";
 
 import CourseCard from "../../components/CourseCard/CourseCard";
 function Courses() {

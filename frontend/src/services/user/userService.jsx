@@ -146,3 +146,67 @@ export const userLogoutServiceFunc = async (token) => {
     throw error;
   }
 };
+export const checkoutServiceFunc = async (token, courseID) => {
+  debugger;
+  try {
+    const response = await axios.post(
+      `${BASE_URL}checkout/`,
+      { courseID },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in checkout:", error);
+    throw error;
+  }
+};
+
+export const uploadUserImage = async (token, image) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", image); // Append the image file to FormData
+
+    const response = await axios.post(`${BASE_URL}upload-image/`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data", // Set Content-Type to multipart/form-data
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in uploading image:", error);
+    throw error;
+  }
+};
+export const getUserProfileImage = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}upload-image/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in getting user profile image:", error);
+    throw error;
+  }
+};
+export const updateUserProfileImage = async (token, image) => {
+  debugger;
+  try {
+    const formData = new FormData();
+    formData.append("image", image);
+    const response = await axios.put(`${BASE_URL}upload-image/`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in updating user profile image:", error);
+    throw error;
+  }
+};

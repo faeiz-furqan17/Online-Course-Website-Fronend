@@ -80,7 +80,6 @@ function Login() {
           label="Username"
           value={userData.username}
           onChange={handleInputChange}
-          disabled={user.loading || user.success}
         />
         <TextField
           id="password"
@@ -88,7 +87,6 @@ function Login() {
           type="password"
           value={userData.password}
           onChange={handleInputChange}
-          disabled={user.loading || user.success}
         />
         <Button
           variant="contained"

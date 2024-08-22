@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { enrollmentAddSlicerFunc } from "../../redux/user/userSlice";
+import {
+  enrollmentAddSlicerFunc,
+  checkoutSlicerFunc,
+} from "../../redux/user/userSlice";
 import Snackbar from "@mui/material/Snackbar";
 import { Card, Typography, Button } from "@mui/material";
 import styles from "./CourseCard.module.scss";
@@ -93,6 +96,23 @@ function CourseCard({
             >
               Enroll Now
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ width: "100%" }}
+              onClick={() => {
+                dispatch(
+                  checkoutSlicerFunc({
+                    token: user.data.token.access,
+                    courseID: courseId,
+                  })
+                );
+                setOpen(user.success);
+              }}
+            >
+              Checkout
+            </Button>
           </div>
         </Card>
       </div>
@@ -100,7 +120,7 @@ function CourseCard({
         open={open}
         autoHideDuration={6000}
         onClose={() => setOpen(false)}
-        message="Course Enrolled Successfully"
+        message={user.checkout.success_url}
       />
     </>
   );

@@ -1,0 +1,22 @@
+.container{
+	.h1 {
+		view-timeline: --subjectReveal block;
+		animation-timeline: --subjectReveal;
+	  
+		animation-name: appear;
+		animation-range: entry 100% contain 25%;
+		animation-fill-mode: both;
+		animation-duration: 1ms; /* Firefox requires this to apply the animation */
+	  }
+}
+@keyframes appear {
+	from {
+	  opacity: 0;
+	  font-size: 10px;
+	}
+  
+	to {
+	  opacity: 1;
+	  font-size: 100px;
+	}
+  }
